@@ -70,6 +70,7 @@ h1 img {
 
 /* backbutton */
 .backBtn {
+  margin-top: 20px;
   margin-left: 30px;
   display: block;
 }
@@ -562,6 +563,9 @@ h1 img {
 .solution {
   padding-top: 26px;
 }
+.solution .backBtn {
+  margin-top: 5px;
+}
 .solution .topWrap {
   position: relative;
   display: flex;
@@ -636,4 +640,100 @@ h1 img {
   top: 4px;
   left: -50px;
   width: 40px;
+}
+
+
+/* set mbti */
+.setMbti_title {
+  text-align: center;
+}
+.setMbti_title p {
+  margin: 40px 0;
+}
+.setMbti_title h2 {
+  margin: 30px 0;
+}
+
+.mbitform {
+  text-align: center;
+}
+
+.mbitBtn {
+  display: flex;
+  flex-direction: column;
+}
+.mbitBtn button {
+  border: 1px solid #eee;
+  width: 68px;
+  height: 74px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.mbitBtn button:first-child {
+  margin-bottom: 10px;
+}
+.btn_wrap {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.s_mbit {
+  position: relative;
+  width: 200px;
+  height: 50px;
+  border: 1px solid #eee;
+  border-radius: 50px;
+  margin: 40px auto;
+}
+.s_mbit h2 {
+  line-height: 10px;
+  letter-spacing: 3px;
+}
+.s_mbit .check {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translate(0, -50%);
+}
+
+.mbitform .next {
+  width: 100px;
+  height: 50px;
+  background: #6938EF;
+  border-radius: 50px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+
+/* get mbit */
+.getMbti_wrap {
+  text-align: center;
+}
+.getMbti {
+  background: #6938EF;
+  width: 131px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  color: #fff;
+  border-radius: 50px;
+  margin: 130px auto 50px;
+}
+.getMbti_wrap p {
+  margin-top: 40px;
+}
+.getMbti_wrap button {
+  margin-top: 100px;
+  color: #fff;
+  background: #6938EF;
+  font-size: 22px;
+  font-weight: bold;
+  width: 80%;
+  height: 60px;
+  border-radius: 60px;
+  
 }

@@ -2,7 +2,7 @@ import React from 'react'
 
 function NotFoundPage() {
   return (
-    <div>NotFoundPage</div>
+    <div>잘못된 경로입니다.</div>
   )
 }
 
