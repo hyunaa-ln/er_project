@@ -13,15 +13,26 @@ function CommunityPage() {
 
     const tabContent = {
         tab1: [
-            { title: "본인 김정은인데 오물풍선 보내도 될까?", mbti: "ISTJ", name: "정은짱", time: "17:00", view: "조회 0" },
-            { title: "본인 김정은인데 오물풍선 보내도 될까?", mbti: "ISTJ", name: "정은짱", time: "17:00", view: "조회 0" },
-            { title: "본인 김정은인데 오물풍선 보내도 될까?", mbti: "ISTJ", name: "정은짱", time: "17:00", view: "조회 0" },
-            { title: "본인 김정은인데 오물풍선 보내도 될까?", mbti: "ISTJ", name: "정은짱", time: "17:00", view: "조회 0" }
+            { title: "본인 김정은인데 오물풍선 보내도 될까?", mbti: "ISTJ", name: "정은짱", time: "17:00"},
+            { title: "본인 김정은인데 오물풍선 보내도 될까?", mbti: "ISTJ", name: "정은짱", time: "17:00"},
+            { title: "본인 김정은인데 오물풍선 보내도 될까?", mbti: "ISTJ", name: "정은짱", time: "17:00"},
+            { title: "본인 김정은인데 오물풍선 보내도 될까?", mbti: "ISTJ", name: "정은짱", time: "17:00"},
+            { title: "본인 김정은인데 오물풍선 보내도 될까?", mbti: "ISTJ", name: "정은짱", time: "17:00"},
+            { title: "본인 김정은인데 오물풍선 보내도 될까?", mbti: "ISTJ", name: "정은짱", time: "17:00"},
+            { title: "본인 김정은인데 오물풍선 보내도 될까?", mbti: "ISTJ", name: "정은짱", time: "17:00"},
+            { title: "본인 김정은인데 오물풍선 보내도 될까?", mbti: "ISTJ", name: "정은짱", time: "17:00"}
         ],
         tab2: [
-            { title: "안됑 >,<", mbti: "ENFP", name: "엉탐", time: "17:00", view: "조회 0" },
-            { title: "안됑 >,<", mbti: "ENFP", name: "엉탐", time: "17:00", view: "조회 0" },
-            { title: "안됑 >,<", mbti: "ENFP", name: "엉탐", time: "17:00", view: "조회 0" }
+            { rank: 1, title: "안됑 >,<", mbti: "ENFP", name: "엉탐", time: "17:00"},
+            { rank: 2, title: "안됑 >,<", mbti: "ENFP", name: "엉탐", time: "17:00"},
+            { rank: 3, title: "안됑 >,<", mbti: "ENFP", name: "엉탐", time: "17:00"},
+            { rank: 4, title: "안됑 >,<", mbti: "ENFP", name: "엉탐", time: "17:00"},
+            { rank: 5, title: "안됑 >,<", mbti: "ENFP", name: "엉탐", time: "17:00"},
+            { rank: 6, title: "안됑 >,<", mbti: "ENFP", name: "엉탐", time: "17:00"},
+            { rank: 7, title: "안됑 >,<", mbti: "ENFP", name: "엉탐", time: "17:00"},
+            { rank: 8, title: "안됑 >,<", mbti: "ENFP", name: "엉탐", time: "17:00"},
+            { rank: 9, title: "안됑 >,<", mbti: "ENFP", name: "엉탐", time: "17:00"},
+            { rank: 10, title: "안됑 >,<", mbti: "ENFP", name: "엉탐", time: "17:00"},
         ]
     };
 
@@ -55,8 +66,9 @@ function CommunityPage() {
             <div className="tab_content">
                 <ul className='tab_list'>
                     {tabContent[activeTab].map((item, index) => (
-                        <li key={index}>
+                        <li key={index} className={activeTab === 'tab2' ? 'popular' : ''}>
                             <Link to='/communityPost'>
+                                {activeTab === 'tab2' && <span className='rank'>{item.rank}</span>}
                                 <div>
                                     <h3>{item.title}</h3>
                                     <span className='badge'>{item.mbti}</span>
@@ -65,7 +77,6 @@ function CommunityPage() {
                                 <div className='bottom_list'>
                                     <p className='l_name'>{item.name}</p>
                                     <p className='l_time'>{item.time}</p>
-                                    <p className='l_view'>{item.view}</p>
                                 </div>
                             </Link>
                         </li>
