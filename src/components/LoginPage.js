@@ -11,6 +11,37 @@ function LoginPage() {
     const handleUsernameChange = (e) => setUsername(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
 
+    // 로그인 후 MBTI 확인 및 리다이렉트 처리
+    const handleLoginSuccess = async () => {
+        try {
+            const response = await fetch('http://localhost:8080/api/mypage', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+
+            if (response.ok) {
+                const user = await response.json();
+
+                // myMbti가 null이면 SetMbtiPage로 이동
+                if (!user.myMbti) {
+                    navigate('/setMbti'); // MBTI 설정 페이지로 이동
+                } else {
+                    navigate('/'); // 홈 페이지로 이동
+                }
+            } else {
+                console.error('Failed to fetch user info');
+                setError('사용자 정보를 가져오는 데 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+            setError('서버와 통신 중 오류가 발생했습니다.');
+        }
+    };
+
+    // 로그인 처리
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -22,23 +53,27 @@ function LoginPage() {
             });
 
             if (response.ok) {
-                // 서버에서 JWT 토큰 수신
-                const token = response.headers.get('Authorization')?.replace('Bearer ', '');
+                // JWT 토큰 수신
+                const authHeader = response.headers.get('Authorization');
+                console.log('Authorization Header:', authHeader);
 
+                const token = authHeader?.split(' ')[1]; // 'Bearer ' 접두사 제거
                 if (token) {
-                    // 토큰을 localStorage에 저장
-                    localStorage.setItem('token', token);
+                    localStorage.setItem('token', token); // 토큰 저장
                     alert('로그인 성공!');
-                    navigate('/'); // 로그인 성공 시 홈 페이지로 이동
+
+                    // 로그인 성공 후 MBTI 확인 및 리다이렉트
+                    await handleLoginSuccess();
                 } else {
-                    setError('토큰을 받아올 수 없습니다.');
+                    alert('토큰을 받아올 수 없습니다.');
                 }
             } else {
                 const errorMessage = await response.text();
-                setError(errorMessage || '로그인에 실패했습니다.');
+                alert(errorMessage || '로그인에 실패했습니다.');
             }
         } catch (error) {
-            setError('서버와 통신 중 오류가 발생했습니다.');
+            console.error('Error:', error);
+            alert('서버와 통신 중 오류가 발생했습니다.');
         }
     };
 

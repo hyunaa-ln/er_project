@@ -9,7 +9,7 @@ function MyPage() {
 
     // Fetch user info when the component mounts
     useEffect(() => {
-        const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+        const token = localStorage.getItem('token'); // 토큰 확인
 
         if (!token) {
             alert('로그인이 필요합니다.');
@@ -17,26 +17,26 @@ function MyPage() {
             return;
         }
 
-        // Fetch user information from the API
         const fetchUserInfo = async () => {
             try {
                 const response = await fetch('http://localhost:8080/api/mypage', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`, // Include the JWT token in the header
+                        Authorization: `Bearer ${token}`, // 토큰 사용
                     },
                 });
 
                 if (response.ok) {
                     const userData = await response.json();
-                    setUser(userData); // Save user info to state
+                    setUser(userData); // 유저 정보 설정
                 } else {
                     const errorMessage = await response.text();
                     setError(errorMessage || '사용자 정보를 가져오는데 실패했습니다.');
                 }
             } catch (error) {
                 setError('서버와 통신 중 오류가 발생했습니다.');
+                console.error(error);
             }
         };
 
@@ -44,9 +44,8 @@ function MyPage() {
     }, [navigate]);
 
     const handleLogout = () => {
-        localStorage.removeItem('isLoggedIn'); // Remove login state
-        localStorage.removeItem('token'); // Remove token
-        navigate('/login'); // Redirect to login page
+        localStorage.removeItem('token'); // 토큰 삭제
+        navigate('/login'); // 로그인 페이지로 이동
     };
 
     return (

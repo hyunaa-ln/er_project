@@ -9,13 +9,12 @@ function Navigation() {
     const navigate = useNavigate();
 
     const handleMypageClick = () => {
-        // 로그인 상태 체크 (localStorage에 로그인 정보가 있는지 확인)
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        const token = localStorage.getItem('token'); // 토큰 존재 여부 확인
 
-        if (isLoggedIn) {
-            navigate('/mypage'); // 로그인 상태면 마이페이지로 이동
+        if (token) {
+            navigate('/mypage'); // 토큰이 있으면 마이페이지로 이동
         } else {
-            navigate('/login'); // 로그인하지 않았으면 로그인 페이지로 이동
+            navigate('/login'); // 토큰이 없으면 로그인 페이지로 이동
         }
     };
 
