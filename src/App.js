@@ -4,6 +4,7 @@ import './App.css';
 import CodePage from './components/CodePage';
 import CommunityPage from './components/CommunityPage';
 import CommunityPostPage from './components/CommunityPostPage';
+import EditPostPage from './components/EditPostPage';
 import FindPwdCodePage from './components/FindPwdCodePage';
 import FindPwdPage from './components/FindPwdPage';
 import GetMbtiPage from './components/GetMbtiPage';
@@ -13,6 +14,7 @@ import JoinCompletePage from './components/JoinCompletePage';
 import JoinPage from './components/JoinPage';
 import LoginPage from './components/LoginPage';
 import MyPage from './components/MyPage';
+import NewPostPage from './components/NewPostPage';
 import NickNamePage from './components/NickNamePage';
 import PwdPage from './components/PwdPage';
 import RootLayout from './components/RootLayout';
@@ -47,6 +49,8 @@ const App = () => {
           <Route path='solution' element={<SolutionPage />} />
           <Route path='community' element={<CommunityPage />} />
           <Route path='communityPost' element={<CommunityPostPage />} />
+          <Route path='newPost' element={<NewPostPage />} />
+          <Route path='EditePost' element={<EditPostPage />} />
         </Route>
         
         <Route path='/*' element={<NotFoundPage />} />

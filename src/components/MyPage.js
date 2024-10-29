@@ -59,7 +59,7 @@ function MyPage() {
                     <img alt="" />
                 </div>
                 <div className="mypage_nameBox">
-                    <p>{user.nickname || '닉네임 없음'}</p>
+                    <p>{user.nickname || '닉네임 없음'}<span className='badge'>{user.myMbti || '-'}</span></p>
                     <p>{user.username || '이메일 없음'}</p>
                 </div>
             </div>
@@ -70,6 +70,9 @@ function MyPage() {
                 </li>
                 <li>
                     <Link to="">내가 쓴 댓글</Link>
+                </li>
+                <li>
+                    <Link to="">나의 MBTI 수정</Link>
                 </li>
                 <li>
                     <Link to="">비밀번호 수정</Link>

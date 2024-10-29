@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 /*img*/
 import logo from '../assets/Logo.svg';
 import searchIcon from '../assets/search.svg';
+import edit from '../assets/edit.svg'
 
 function CommunityPage() {
     const [activeTab, setActiveTab] = useState('tab1');
@@ -82,6 +83,12 @@ function CommunityPage() {
                         </li>
                     ))}
                 </ul>
+            </div>
+
+            <div className='addPost'>
+                <Link to='/newPost'>
+                    <button><img src={edit} alt='edit'></img></button>
+                </Link>
             </div>
         </div>
     );
