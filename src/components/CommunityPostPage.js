@@ -61,6 +61,12 @@ function CommunityPostPage() {
   return (
     <div className='communityPost'>
       <BackButton />
+      <div className='p_btnWrap'>
+        <button className='p_editBtn p_btn'>수정</button>
+        <span></span>
+        <button className='p_deleteBtn p_btn'>삭제</button>
+      </div>
+      
       <div className='mainPost'>
         <div className='profileBox'>
           <img src={thumb} alt='thumb' className='main_thumb'></img>
@@ -93,6 +99,11 @@ function CommunityPostPage() {
               <div>
                 <p>{comment.username}</p>
                 <span className='badge'>{comment.badge}</span>
+                <div className='c_btnWrap'>
+                  <button className='c_editBtn c_btn'>수정</button>
+                  <span></span>
+                  <button className='c_deleteBtn c_btn'>삭제</button>
+                </div>
               </div>
               <p className='commentText'>{comment.text}</p>
             </div>

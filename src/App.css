@@ -11,8 +11,9 @@ a {
 body {
   width: 500px;
   margin: 0 auto;
+  position: relative;
 }
-body, button, input {
+body, button, input, textarea {
   font-family: "Noto Sans KR", sans-serif;
 }
 p {
@@ -102,6 +103,11 @@ h1 img {
   flex-direction: column;
   margin-left: 24px;
 }
+.mypage_nameBox p {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 .mypage_list {
   margin-bottom: 220px;
   color: #49475A;
@@ -118,6 +124,11 @@ h1 img {
 .mypage_list li a {
   display: block;
   line-height: 57px;
+}
+.mypage_list button {
+  line-height: 57px;
+  font-size: 16px;
+  color: #49475A;
 }
 
 .unregister {
@@ -373,7 +384,6 @@ h1 img {
 
 
 /* community */
-
 .community_header {
   height: 126px;
   background: #f8f6ff;
@@ -467,12 +477,80 @@ h1 img {
   margin-left: 40px;
   position: relative;
 }
+.addPost {
+  position: fixed;
+  width: 500px;
+  bottom: 82px;
+}
+.addPost button {
+  position: relative;
+  right: -440px;
+  bottom: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50px;
+  background: #6938EF;
+  }
+.addPost button:hover {
+  background: #7b4cfd;
+  transition: .2s;
+}
 
 
 /* communityPost */
 .communityPost {
   position: relative;
 }
+.p_btnWrap {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding-right: 30px;
+  display: flex;
+  align-items: center;
+}
+.p_btnWrap .p_btn {
+  font-size: 16px;
+  color: #6938EF;
+}
+.p_btnWrap span {
+  width: 1px;
+  height: 20px;
+  background: #EAEAEA;
+  display: flex;
+}
+.p_editBtn {
+  margin-right: 10px;
+}
+.p_deleteBtn {
+  margin-left: 10px;
+}
+
+
+.c_btnWrap {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+.c_btnWrap .c_btn {
+  font-size: 14px;
+  color: #6938EF;
+  padding-bottom: 2px;
+}
+.c_btnWrap span {
+  width: 1px;
+  height: 15px;
+  background: #EAEAEA;
+  display: flex;
+}
+.c_editBtn {
+  margin-right: 10px;
+}
+.c_deleteBtn {
+  margin-left: 10px;
+}
+
+
 .mainPost {
   border-bottom: 7px solid #F7F7F7;
 }
@@ -772,4 +850,36 @@ h1 img {
   height: 60px;
   border-radius: 60px;
   
+}
+
+/* newPost */
+.newPost button.addBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding-right: 30px;
+  font-size: 16px;
+  color: #6938EF;
+}
+.form-group input {
+  width: 100%;
+  height: 64px;
+  font-size: 16px;
+  border: 0;
+  border-bottom: 1px solid #eee;
+  padding: 0 30px;
+  box-sizing: border-box;
+}
+.form-group textarea {
+  width: 100%;
+  height: calc(100vh - 200px);
+  font-size: 16px;
+  border: 0;
+  padding: 0 30px;
+  resize: none;
+  padding-top: 20px;
+  box-sizing: border-box;
+}
+.form-group input:focus, .form-group textarea:focus {
+  outline: none;
 }
