@@ -1,11 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import BackButton from './BackButton';
+import { useModal } from '../components/ModalContext';
 
 function MyPage() {
     const navigate = useNavigate();
     const [user, setUser] = useState({ nickname: '', username: '' });
     const [error, setError] = useState('');
+    const { openModal, closeModal } = useModal(); // closeModal 추가
+
+    const handleOpenLogoutModal = () => {
+        openModal(
+            <div>
+                <h2>로그아웃 하시겠습니까?</h2>
+                <button onClick={handleLogout}>확인</button>
+            </div>
+        );
+    };
+
+    const handleOpenUnregisterModal = () => {
+        openModal(
+            <div>
+                <h2>회원탈퇴 하시겠습니까?</h2>
+                <p>회원탈퇴를 하시면 모든 데이터가 삭제됩니다. <br/>계속하시려면 현재 사용중인 비밀번호를 입력하세요.</p>
+                <input
+                    type='password'
+                    placeholder='비밀번호 확인'
+                />
+                <button onClick={handleUnregister}>확인</button>
+            </div>
+        );
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('token'); // 토큰 삭제
+        closeModal(); // 모달 닫기
+        navigate('/login'); // 로그인 페이지로 이동
+    };
+
+    const handleUnregister = () => {
+        // 회원탈퇴 처리 로직 추가
+        localStorage.removeItem('token'); // 토큰 삭제
+        closeModal(); // 모달 닫기
+        navigate('/login'); // 로그인 페이지로 이동
+        // 필요한 경우 회원탈퇴 API 호출
+    };
 
     // Fetch user info when the component mounts
     useEffect(() => {
@@ -43,11 +82,6 @@ function MyPage() {
         fetchUserInfo();
     }, [navigate]);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token'); // 토큰 삭제
-        navigate('/login'); // 로그인 페이지로 이동
-    };
-
     return (
         <div>
             <BackButton />
@@ -78,11 +112,11 @@ function MyPage() {
                     <Link to="">비밀번호 수정</Link>
                 </li>
                 <li>
-                    <button onClick={handleLogout}>로그아웃</button>
+                    <button onClick={handleOpenLogoutModal}>로그아웃</button>
                 </li>
             </ul>
 
-            <button className="unregister">회원탈퇴</button>
+            <button className="unregister" onClick={handleOpenUnregisterModal}>회원탈퇴</button>
 
             {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>

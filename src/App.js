@@ -1,5 +1,7 @@
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom';
+import { ModalProvider, useModal } from './components/ModalContext';
 import './App.css';
+
 
 import CodePage from './components/CodePage';
 import CommunityPage from './components/CommunityPage';
@@ -22,6 +24,7 @@ import SetMbtiPage from './components/SetMbtiPage';
 import SetNewPwdPage from './components/SetNewPwdPage';
 import SolutionPage from './components/SolutionPage';
 import NotFoundPage from './components/NotFoundPage';
+import AlertModal from './components/AlertModal';
 
 const App = () => {
     const router = createBrowserRouter(
@@ -58,7 +61,26 @@ const App = () => {
         )
     );
 
+<<<<<<< HEAD
     return <RouterProvider router={router} />;
+=======
+  return (
+    <ModalProvider>
+      <RouterProvider router={router} />
+      <AlertModalWrapper />
+    </ModalProvider>
+  );
+>>>>>>> c20edb7c89749238c2c52f915ce33026387868d1
 };
+
+function AlertModalWrapper() {
+  const { isModalOpen, closeModal, modalContent } = useModal();
+
+  return (
+    <AlertModal isOpen={isModalOpen} onClose={closeModal}>
+      {modalContent}
+    </AlertModal>
+  );
+}
 
 export default App;

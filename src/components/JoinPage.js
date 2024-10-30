@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useModal } from '../components/ModalContext';
 
 function JoinPage() {
     const [email, setEmail] = useState('');
-    const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { openModal } = useModal();
+
+    const handleOpenErrorModal = (message) => {
+        openModal(
+            <div>
+                <h2>{message}</h2>
+            </div>
+        );
+    };
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value);
@@ -33,14 +42,14 @@ function JoinPage() {
                     alert('인증번호가 발송되었습니다.');
                     navigate('/id/code', { state: { email } });
                 } else {
-                    alert('인증번호 발송에 실패했습니다.');
+                    handleOpenErrorModal('인증번호 발송에 실패했습니다.'); // 인증번호 발송 실패 시 모달 띄우기
                 }
             } else {
                 const data = await checkResponse.json();
-                setError(data.emailError || '알 수 없는 오류가 발생했습니다.');
+                handleOpenErrorModal(data.emailError || '알 수 없는 오류가 발생했습니다.'); // 이메일 검사 오류 시 모달 띄우기
             }
         } catch (error) {
-            setError('서버와 통신 중 오류가 발생했습니다.');
+            handleOpenErrorModal('서버와 통신 중 오류가 발생했습니다.'); // 서버 오류 시 모달 띄우기
         }
     };
 
@@ -60,7 +69,6 @@ function JoinPage() {
                     />
                     <button type="submit">입력완료</button>
                 </div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
             </form>
         </div>
     );
