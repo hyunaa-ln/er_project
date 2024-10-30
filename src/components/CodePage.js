@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useModal } from '../components/ModalContext';
 
 function CodePage() {
     const navigate = useNavigate();
@@ -8,16 +7,6 @@ function CodePage() {
     const [code, setCode] = useState('');
     const [error, setError] = useState('');
     const email = location.state?.email || '';
-    const { openModal } = useModal();
-
-    const handleOpenCodeFailedModal = () => {
-        openModal(
-            <div>
-                <h2>인증에 실패했습니다.</h2>
-                <p>인증번호가 일치하지 않습니다. 다시 입력해주세요.</p>
-            </div>
-        );
-    };
 
     const handleCodeChange = (e) => {
         setCode(e.target.value);
@@ -38,7 +27,8 @@ function CodePage() {
                 alert('인증에 성공했습니다.');
                 navigate('/id/pwd', { state: { email } });
             } else {
-                handleOpenCodeFailedModal();
+                const errorMessage = await response.text();
+                setError(errorMessage || '인증에 실패했습니다.');
             }
         } catch (error) {
             setError('서버와 통신 중 오류가 발생했습니다.');
