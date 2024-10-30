@@ -1,4 +1,5 @@
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom';
+import { ModalProvider, useModal } from './components/ModalContext';
 import './App.css';
 
 import CodePage from './components/CodePage';
@@ -23,6 +24,7 @@ import RootLayout from './components/RootLayout';
 import SetMbtiPage from './components/SetMbtiPage';
 import SetNewPwdPage from './components/SetNewPwdPage';
 import SolutionPage from './components/SolutionPage';
+import AlertModal from './components/AlertModal';
 import NotFoundPage from './components/NotFoundPage';
 
 const App = () => {
@@ -62,7 +64,22 @@ const App = () => {
         )
     );
 
-    return <RouterProvider router={router} />;
+    return (
+      <ModalProvider>
+        <RouterProvider router={router} />
+        <AlertModalWrapper />
+      </ModalProvider>
+    );
+
+    function AlertModalWrapper() {
+      const { isModalOpen, closeModal, modalContent } = useModal();
+    
+      return (
+        <AlertModal isOpen={isModalOpen} onClose={closeModal}>
+          {modalContent}
+        </AlertModal>
+      );
+    }
 };
 
 export default App;
