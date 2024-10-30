@@ -1,129 +1,232 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode'; // import 수정
 import BackButton from './BackButton';
-import CommentForm from './CommentForm';
-/*img*/
 import thumb from '../assets/Vector.svg';
 import e_heart from '../assets/empty-heart.svg';
 import f_heart from '../assets/full-heart.svg';
 
 function CommunityPostPage() {
-  const [comments, setComments] = useState([
-    { username: "차은우", badge: "ISTJ", text: "외모 비결 좀 알려주세요", time: "11:30 AM", isHeartFilled: false, likes: 0 },
-    { username: "Pu틴핑", badge: "ISTJ", text: "허억허 사랑해 허억허억 사랑해 ", time: "11:30 AM", isHeartFilled: false, likes: 0 },
-    { username: "도람뿌", badge: "ISTJ", text: "미띤!", time: "11:30 AM", isHeartFilled: false, likes: 0 }
-  ]);
+    const { postId } = useParams();
+    const navigate = useNavigate();
+    const [post, setPost] = useState(null);
+    const [comments, setComments] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [isLiked, setIsLiked] = useState(false);
+    const [likeCount, setLikeCount] = useState(0);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [newComment, setNewComment] = useState('');
+    const [isAuthor, setIsAuthor] = useState(false);
 
-  const [newComment, setNewComment] = useState("");
-  const [isPostHeartFilled, setIsPostHeartFilled] = useState(false); // 게시글 하트 상태
-  const [postLikes, setPostLikes] = useState(0); // 게시글 좋아요 수
-
-  const handleCommentChange = (e) => {
-    setNewComment(e.target.value);
-  };
-
-  const handleCommentSubmit = (e) => {
-    e.preventDefault();
-    if (newComment.trim() === "") return;
-
-    const newCommentObj = {
-      username: "Anonymous",
-      badge: "INTJ",
-      text: newComment,
-      time: new Date().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit', hour12: true }),
-      isHeartFilled: false, // 새 댓글의 하트 상태 초기화
-      likes: 0 // 새 댓글의 좋아요 수 초기화
+    // 토큰에서 username 추출
+    const getUsernameFromToken = () => {
+        const token = localStorage.getItem('token');
+        if (!token) return null;
+        try {
+            const decoded = jwtDecode(token); // 수정된 import 사용
+            console.log(decoded); // 토큰 내용 확인
+            return decoded.username; // 올바른 필드명 확인
+        } catch (err) {
+            console.error('Error decoding token:', err);
+            return null;
+        }
     };
 
-    setComments([...comments, newCommentObj]);
-    setNewComment("");
-  };
+    const toggleCommentHeart = (commentId) => {
+        setComments((prevComments) =>
+            prevComments.map((comment) =>
+                comment.id === commentId
+                    ? {
+                          ...comment,
+                          isLiked: !comment.isLiked,
+                          likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1,
+                      }
+                    : comment
+            )
+        );
+    };
 
-  const toggleCommentHeart = (index) => {
-    setComments(comments.map((comment, i) => 
-      i === index 
-        ? { 
-            ...comment, 
-            isHeartFilled: !comment.isHeartFilled, 
-            likes: comment.isHeartFilled ? comment.likes - 1 : comment.likes + 1 // 하트 클릭 시 좋아요 수 증가/감소
-          } 
-        : comment // 클릭한 댓글만 하트 상태 및 좋아요 수 토글
-    ));
-  };
+    const toggleLike = async () => {
+        if (isProcessing) return;
+        setIsProcessing(true);
 
-  const togglePostHeart = () => {
-    setIsPostHeartFilled(prev => {
-      const newLikes = !prev ? postLikes + 1 : postLikes - 1; // 게시글 하트 클릭 시 좋아요 수 증가/감소
-      setPostLikes(newLikes);
-      return !prev; // 하트 상태 토글
-    });
-  };
+        const endpoint = isLiked
+            ? `http://localhost:8080/api/posts/${postId}/unlike`
+            : `http://localhost:8080/api/posts/${postId}/like`;
 
-  return (
-    <div className='communityPost'>
-      <BackButton />
-      <div className='p_btnWrap'>
-        <button className='p_editBtn p_btn'>수정</button>
-        <span></span>
-        <button className='p_deleteBtn p_btn'>삭제</button>
-      </div>
-      
-      <div className='mainPost'>
-        <div className='profileBox'>
-          <img src={thumb} alt='thumb' className='main_thumb'></img>
-          <div className='profile'>
-            <div>
-              <p>Kim_정은</p>
-              <span className='badge'>ISTJ</span>
-            </div>
-            <p className='p_time'>10:25 AM</p>
-          </div>
-          <div className='p_heart' onClick={togglePostHeart}>
-            <img src={isPostHeartFilled ? f_heart : e_heart} alt='p_heart'></img>
-            <span>{postLikes}</span> {/* 게시글 좋아요 수 표시 */}
-          </div>
-        </div>
-        <div className='mainTextWrap'>
-          <p className='mainText'>
-            안녕하세요! 2024년에는 모솔에서 탈출하고 싶어서 응급실 앱 가입했습니다!
-          </p>
-          <p className='hashTag'>#고민 #모솔 #고민중독</p>
-          <p className='commentNum'>답글 {comments.length}개</p>
-        </div>
-      </div>
+        try {
+            const response = await fetch(endpoint, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
 
-      <div className='comments'>
-        {comments.map((comment, index) => (
-          <div className='comment' key={index}>
-            <img src={thumb} alt='thumb'></img>
-            <div className='commentWrap'>
-              <div>
-                <p>{comment.username}</p>
-                <span className='badge'>{comment.badge}</span>
-                <div className='c_btnWrap'>
-                  <button className='c_editBtn c_btn'>수정</button>
-                  <span></span>
-                  <button className='c_deleteBtn c_btn'>삭제</button>
+            if (!response.ok) throw new Error(`Error: ${response.status}`);
+            const data = await response.json();
+
+            setIsLiked(!isLiked);
+            setLikeCount(data.data.likeCount);
+            localStorage.setItem(`like-${postId}`, !isLiked);
+        } catch (err) {
+            console.error('Error toggling like:', err);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    useEffect(() => {
+        const fetchPostAndComments = async () => {
+            try {
+                const postResponse = await fetch(`http://localhost:8080/api/posts/${postId}`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+                });
+
+                if (!postResponse.ok) throw new Error(`Error: ${postResponse.status}`);
+                const postData = await postResponse.json();
+                setPost(postData.data);
+                setLikeCount(postData.data.likeCount);
+
+                // 게시물 작성자와 토큰의 사용자 비교
+                const tokenUsername = getUsernameFromToken();
+                setIsAuthor(postData.data.username === tokenUsername); // 작성자 확인
+
+                setIsLiked(postData.data.isLiked || localStorage.getItem(`like-${postId}`) === 'true');
+
+                const commentsResponse = await fetch(`http://localhost:8080/api/posts/${postId}/comments`, {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+                });
+
+                if (!commentsResponse.ok) throw new Error(`Error: ${commentsResponse.status}`);
+                const commentsData = await commentsResponse.json();
+                setComments(commentsData);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPostAndComments();
+    }, [postId]);
+
+    const handleDelete = async () => {
+        if (window.confirm('정말 이 게시물을 삭제하시겠습니까?')) {
+            try {
+                await fetch(`http://localhost:8080/api/posts/${postId}`, {
+                    method: 'DELETE',
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+                });
+                alert('게시물이 삭제되었습니다.');
+                navigate('/');
+            } catch (err) {
+                console.error('Error deleting post:', err);
+            }
+        }
+    };
+
+    const handleEdit = () => {
+        navigate(`/editPost/${postId}`); // 경로가 정확한지 확인
+    };
+
+    const handleCommentSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`http://localhost:8080/api/posts/${postId}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({ content: newComment }),
+            });
+
+            if (!response.ok) throw new Error(`Error: ${response.status}`);
+            const createdComment = await response.json();
+            setComments((prevComments) => [...prevComments, createdComment]);
+            setNewComment('');
+        } catch (err) {
+            console.error('Error submitting comment:', err);
+        }
+    };
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
+
+    return (
+        <div className="communityPost">
+            <BackButton />
+            <div className="mainPost">
+                <div className="profileBox">
+                    <img src={thumb} alt="thumb" className="main_thumb" />
+                    <div className="profile">
+                        <p>{post.nickname}</p>
+                        <span className="badge">{post.myMbti}</span>
+                    </div>
+                    {isAuthor && (
+                        <div className="p_btnWrap">
+                            <button className="p_editBtn" onClick={handleEdit}>
+                                수정
+                            </button>
+                            <button className="p_deleteBtn" onClick={handleDelete}>
+                                삭제
+                            </button>
+                        </div>
+                    )}
+                    <div
+                        className={`p_heart ${isProcessing ? 'disabled' : ''}`}
+                        onClick={toggleLike}
+                        style={{ cursor: isProcessing ? 'not-allowed' : 'pointer' }}
+                    >
+                        <img src={isLiked ? f_heart : e_heart} alt="heart" />
+                        <span>{likeCount}</span>
+                    </div>
                 </div>
-              </div>
-              <p className='commentText'>{comment.text}</p>
+                <div className="mainTextWrap">
+                    <p className="mainText">{post.postContent}</p>
+                </div>
             </div>
-            <p className='c_time'>{comment.time}</p>
-            <div className='c_heart' onClick={() => toggleCommentHeart(index)}>
-              <img src={comment.isHeartFilled ? f_heart : e_heart} alt='c_heart'></img>
-              <span>{comment.likes}</span> {/* 댓글 좋아요 수 표시 */}
-            </div>
-          </div>
-        ))}
-      </div>
 
-      {/* CommentForm 컴포넌트를 사용 */}
-      <CommentForm
-        newComment={newComment}
-        onCommentChange={handleCommentChange}
-        onCommentSubmit={handleCommentSubmit}
-      />
-    </div>
-  );
+            <div className="commentsSection">
+                <h3>Comments</h3>
+                {comments.map((comment) => (
+                    <div key={comment.id} className="comment">
+                        <div className="profileBox">
+                            <img src={thumb} alt="thumb" className="main_thumb" />
+                            <div className="profile">
+                                <p>{comment.nickname}</p>
+                                <span className="badge">{comment.myMbti}</span>
+                                <p className="commentContent">{comment.content}</p>
+                            </div>
+                        </div>
+                        <div className="commentRight">
+                            <div className="commentDate">
+                                <p>{new Date(comment.createdDate).toLocaleDateString()}</p>
+                                <p>
+                                    {new Date(comment.createdDate).toLocaleTimeString([], {
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                    })}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <form className="commentForm" onSubmit={handleCommentSubmit}>
+                <input
+                    type="text"
+                    placeholder="Write a comment..."
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                />
+                <button type="submit">Post</button>
+            </form>
+        </div>
+    );
 }
 
 export default CommunityPostPage;
