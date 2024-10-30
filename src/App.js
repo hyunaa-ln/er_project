@@ -1,4 +1,5 @@
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom';
+import { ModalProvider, useModal } from './components/ModalContext';
 import './App.css';
 
 import CodePage from './components/CodePage';
@@ -17,10 +18,13 @@ import MyPage from './components/MyPage';
 import NewPostPage from './components/NewPostPage';
 import NickNamePage from './components/NickNamePage';
 import PwdPage from './components/PwdPage';
+import ResetMbitPage from './components/ResetMbtiPage';
+import ResetPwdPage from './components/ResetPwdPage';
 import RootLayout from './components/RootLayout';
 import SetMbtiPage from './components/SetMbtiPage';
 import SetNewPwdPage from './components/SetNewPwdPage';
 import SolutionPage from './components/SolutionPage';
+import AlertModal from './components/AlertModal';
 import NotFoundPage from './components/NotFoundPage';
 
 const App = () => {
@@ -50,6 +54,8 @@ const App = () => {
                     <Route path="communityPost/:postId" element={<CommunityPostPage />} /> {/* 동적 라우트 설정 */}
                     <Route path="newPost" element={<NewPostPage />} />
                     <Route path="editPost/:postId" element={<EditPostPage />} /> {/* 동적 라우트 수정 */}
+                    <Route path="resetMbti" element={<ResetMbitPage />} />
+                    <Route path="resetPwd" element={<ResetPwdPage />} />
                 </Route>
 
                 {/* 404 Not Found 페이지 */}
@@ -58,7 +64,22 @@ const App = () => {
         )
     );
 
-    return <RouterProvider router={router} />;
+    return (
+      <ModalProvider>
+        <RouterProvider router={router} />
+        <AlertModalWrapper />
+      </ModalProvider>
+    );
+
+    function AlertModalWrapper() {
+      const { isModalOpen, closeModal, modalContent } = useModal();
+    
+      return (
+        <AlertModal isOpen={isModalOpen} onClose={closeModal}>
+          {modalContent}
+        </AlertModal>
+      );
+    }
 };
 
 export default App;

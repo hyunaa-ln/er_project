@@ -109,7 +109,14 @@ function SolutionPage() {
                         <span>{msg.text}</span>
                     </div>
                 ))}
-                {loading && <div className="loading">로딩 중...</div>}
+                {loading && <div className="loading">
+                    <img src={thumb} alt="Bot" className="bot-image" />
+                    <div>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    </div>}
             </div>
 
             <div className="choices-container">
