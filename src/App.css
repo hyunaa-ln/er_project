@@ -1,4 +1,8 @@
 /* common */
+input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+}
 ul,
 li {
     margin: 0;
@@ -419,8 +423,18 @@ h1 img {
     transition: 0.2s;
 }
 
+.search-result-text {
+    text-align: center;
+    padding: 20px 0;
+    color: #6938EF;
+    border-bottom: 1px solid #eee;
+}
+
 .tab_list {
     margin-bottom: 82px;
+}
+.tab_list li {
+    position: relative;
 }
 .tab_list h3 {
     margin: 30px 0 10px;
@@ -443,6 +457,21 @@ h1 img {
     font-weight: bold;
     text-align: center;
     line-height: 18px;
+}
+.category {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    width: 57px;
+    height: 30px;
+    background: #f8f6ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6938EF;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 0 0 10px 10px;
 }
 .tab_list .badge {
     margin-top: 23px;
@@ -876,6 +905,37 @@ h1 img {
 }
 
 /* newPost */
+.form-group-mbti {
+    display: flex;
+    font-size: 14px;
+    color: #6938EF;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    margin-top: 15px;
+}
+.form-group-mbti label {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 15px 0;
+    border-right: 1px solid #eee;
+}
+.form-group-mbti select {
+    appearance: none;
+    width: 50%;
+    box-sizing: border-box;
+    color: #6938EF;
+    text-align: center;
+    border: 0;
+    background-image: url('./assets/chevron-down.svg');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+.form-group-mbti select:focus {
+    outline: none;
+}
+
 .newPost button.addBtn {
     position: absolute;
     top: 0;
@@ -914,45 +974,109 @@ h1 img {
 }
 
 
+
+
 /* alertModal */
 .alertModal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 350px;
-    text-align: center;
-    transform: translate(-50%, -50%);
-    padding: 30px 20px 20px;
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, .1);
-  }
-  .alertModal h2 {
-    font-size: 16px;
-  }
-  .alertModal p {
-    font-size: 14px;
-    margin-bottom: 20px;
-  }
-  .alertModal div div button {
-    width: 100%;
-    background: #6938EF;
-    color: #fff;
-    border-radius: 10px;
-    font-size: 16px;
-    padding: 12px 0;
-    margin: 0 0 15px;
-  }
-  .modalClose {
-    font-size: 16px;
-    color: #6938EF;
-  }
-  
-  .alertModal input {
-    width: 100%;
-    margin-bottom: 20px;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    padding: 20px;
-    box-sizing: border-box;
-  }
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 350px;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  padding: 30px 20px 20px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, .1);
+}
+.alertModal h2 {
+  font-size: 16px;
+}
+.alertModal p {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+.alertModal div div button {
+  width: 100%;
+  background: #6938EF;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 16px;
+  padding: 12px 0;
+  margin: 0 0 15px;
+}
+.modalClose {
+  font-size: 16px;
+  color: #6938EF;
+}
+
+.alertModal input {
+  width: 100%;
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+.alertModal input:focus {
+    outline: none;
+    border-color: #6938EF;
+}
+
+/* resetMbti */
+.resetMbti > h2 {
+  text-align: center;
+  font-size: 18px;
+  margin: 30px 0 50px;
+}
+.resetMbti .done {
+  padding: 0 20px;
+}
+.resetMbti .done button {
+  width: 100%;
+  height: 64px;
+  background: #6938EF;
+  border-radius: 64px;
+  font-size: 20px;
+  color: #fff;
+}
+/* resetPwd */
+.resetPwd > h2 {
+  text-align: center;
+  font-size: 18px;
+  margin: 30px 0 50px;
+}
+.resetPwdForm {
+  padding: 0 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.resetPwdForm input {
+  height: 50px;
+  border: 1px solid #CBCAD7;
+  border-radius: 6px;
+  padding-left: 20px;
+}
+.resetPwdForm input::placeholder {
+  color: #CACACA;
+}
+.resetPwdForm input:focus {
+  outline: none;
+  border-color: #6938EF;
+}
+.resetPwdForm input:nth-child(2) {
+  margin-bottom: 30px;
+}
+.resetPwdForm label {
+  color: #9794AA;
+}
+.resetPwd .done button {
+  width: 100%;
+  height: 64px;
+  background: #6938EF;
+  border-radius: 64px;
+  font-size: 20px;
+  color: #fff;
+  margin-top: 40px;
+}

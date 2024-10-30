@@ -56,6 +56,34 @@ function EditPostPage() {
     return (
         <div className="newPost">
             <BackButton />
+            {/* MBTI 선택 드롭다운 */}
+            <div className="form-group-mbti">
+                <label htmlFor="mbti">MBTI 선택</label>
+                <select id="mbti" value={mbti} onChange={(e) => setMbti(e.target.value)} required>
+                    {[
+                        'ISTJ',
+                        'ISFJ',
+                        'INFJ',
+                        'INTJ',
+                        'ISTP',
+                        'ISFP',
+                        'INFP',
+                        'INTP',
+                        'ESTP',
+                        'ESFP',
+                        'ENFP',
+                        'ENTP',
+                        'ESTJ',
+                        'ESFJ',
+                        'ENFJ',
+                        'ENTJ',
+                    ].map((type) => (
+                        <option key={type} value={type}>
+                            {type}
+                        </option>
+                    ))}
+                </select>
+            </div>
             <div className="post-form">
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -78,34 +106,7 @@ function EditPostPage() {
                         />
                     </div>
 
-                    {/* MBTI 선택 드롭다운 */}
-                    <div className="form-group">
-                        <label htmlFor="mbti">MBTI 선택</label>
-                        <select id="mbti" value={mbti} onChange={(e) => setMbti(e.target.value)} required>
-                            {[
-                                'ISTJ',
-                                'ISFJ',
-                                'INFJ',
-                                'INTJ',
-                                'ISTP',
-                                'ISFP',
-                                'INFP',
-                                'INTP',
-                                'ESTP',
-                                'ESFP',
-                                'ENFP',
-                                'ENTP',
-                                'ESTJ',
-                                'ESFJ',
-                                'ENFJ',
-                                'ENTJ',
-                            ].map((type) => (
-                                <option key={type} value={type}>
-                                    {type}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+                    
 
                     <button type="submit" className="addBtn">
                         완료

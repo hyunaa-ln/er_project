@@ -3,11 +3,11 @@ import BackButton from './BackButton';
 
 function ResetPwdPage() {
   return (
-    <div>
+    <div className='resetPwd'>
         <BackButton />
         <h2>비밀번호 수정</h2>
 
-        <form className='resetPwd'>
+        <form className='resetPwdForm'>
             <label htmlFor="">현재 비밀번호</label>
             <input
                 type="password"
@@ -29,9 +29,11 @@ function ResetPwdPage() {
                 required
                 placeholder="비밀번호 재입력"
             />
-            <button type="submit" className="done">
-                입력완료
-            </button>
+            <div className="done">
+                <button type="submit">
+                    입력완료
+                </button>
+            </div>
         </form>
     </div>
   )

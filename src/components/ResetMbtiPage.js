@@ -58,7 +58,7 @@ function ResetMbtiPage() {
     const isActive = (dimension, choice) => choices[dimension] === choice;
 
   return (
-    <div>
+    <div className='resetMbti'>
         <BackButton />
         <h2>나의 MBTI 수정</h2>
 
@@ -138,10 +138,12 @@ function ResetMbtiPage() {
                         {getMBTI()} <img src={check} alt="check" className="check"></img>
                     </h2>
                 </div>
-
-                <button type="submit" className="done">
-                    입력완료
-                </button>
+                <div className="done">
+                    <button type="submit">
+                        입력완료
+                    </button>
+                </div>
+                
             </form>
     </div>
   )

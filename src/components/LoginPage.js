@@ -59,7 +59,6 @@ function LoginPage() {
                 const token = authHeader?.split(' ')[1]; // 'Bearer ' 접두사 제거
                 if (token) {
                     localStorage.setItem('token', token); // 토큰 저장
-                    alert('로그인 성공!');
 
                     // 로그인 성공 후 MBTI 확인 및 리다이렉트
                     await handleLoginSuccess();
