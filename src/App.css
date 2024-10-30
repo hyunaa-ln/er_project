@@ -871,3 +871,8 @@ h1 img {
 .form-group textarea:focus {
     outline: none;
 }
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+}
