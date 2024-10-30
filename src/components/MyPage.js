@@ -13,6 +13,7 @@ function MyPage() {
         openModal(
             <div>
                 <h2>로그아웃 하시겠습니까?</h2>
+                <p>로그아웃 하시려면 확인 버튼을 눌러주세요.</p>
                 <button onClick={handleLogout}>확인</button>
             </div>
         );
@@ -80,6 +81,7 @@ function MyPage() {
 
     const handleLogout = () => {
         localStorage.removeItem('token'); // 토큰 삭제
+        closeModal(); // 모달 닫기
         navigate('/login'); // 로그인 페이지로 이동
     };
 

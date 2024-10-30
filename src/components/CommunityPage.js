@@ -8,19 +8,17 @@ function CommunityPage() {
     const [activeTab, setActiveTab] = useState('tab1');
     const [posts, setPosts] = useState([]);
     const [searchKeyword, setSearchKeyword] = useState('');
+    const [searchResult, setSearchResult] = useState({ isActive: false, keyword: '' }); // 검색 결과와 키워드 저장
     const navigate = useNavigate();
 
-    // 게시글 클릭 시 해당 ID로 이동
     const handlePostClick = (postId) => {
-        navigate(`/communityPost/${postId}`); // 게시글 ID를 URL로 전달
+        navigate(`/communityPost/${postId}`);
     };
 
-    // 탭 변경 시 해당 데이터를 가져옵니다.
     useEffect(() => {
-        fetchPosts(0); // 첫 페이지 데이터 가져오기
+        fetchPosts(0);
     }, [activeTab]);
 
-    // 게시글을 API로부터 가져오는 함수
     const fetchPosts = useCallback(
         async (page) => {
             try {
@@ -35,7 +33,8 @@ function CommunityPage() {
                 }
 
                 const data = await response.json();
-                setPosts(data.data); // API 응답을 상태에 저장
+                setPosts(data.data);
+                setSearchResult({ isActive: false, keyword: '' }); // 탭 변경 시 검색 결과 리셋
             } catch (error) {
                 console.error('Error fetching posts:', error);
             }
@@ -46,9 +45,9 @@ function CommunityPage() {
     useEffect(() => {
         fetchPosts(0);
     }, [fetchPosts]);
-    // 검색 요청 함수
+
     const handleSearch = async (e) => {
-        e.preventDefault(); // 폼의 기본 동작 방지
+        e.preventDefault();
         try {
             const response = await fetch(`http://localhost:8080/api/posts/search?keyword=${searchKeyword}&page=0`);
 
@@ -57,7 +56,8 @@ function CommunityPage() {
             }
 
             const data = await response.json();
-            setPosts(data.data); // 검색 결과를 상태에 저장
+            setPosts(data.data);
+            setSearchResult({ isActive: true, keyword: searchKeyword }); // 검색 결과 상태와 키워드 설정
         } catch (error) {
             console.error('Error searching posts:', error);
         }
@@ -74,7 +74,6 @@ function CommunityPage() {
                     <img src={logo} alt="logo" />
                     응급실 커뮤니티
                 </h1>
-                {/* 검색 폼 */}
                 <form onSubmit={handleSearch}>
                     <input
                         type="search"
@@ -103,18 +102,22 @@ function CommunityPage() {
                 </button>
             </div>
 
+            {searchResult.isActive && (
+                <p className="search-result-text">"{searchResult.keyword}" 검색결과</p>
+            )} {/* 검색 결과와 키워드 표시 */}
+
             <div className="tab_content">
                 <ul className="tab_list">
                     {posts.map((item, index) => (
                         <li
                             key={item.id}
                             className={activeTab === 'tab2' ? 'popular' : ''}
-                            onClick={() => handlePostClick(item.id)} // 클릭 시 이동
+                            onClick={() => handlePostClick(item.id)}
                         >
                             {activeTab === 'tab2' && <span className="rank">{index + 1}</span>}
                             <div>
                                 <h3>{item.postTitle}</h3>
-                                <span className="badge">{item.mbti}</span>
+                                <span className="category">{item.mbti}</span>
                             </div>
                             <div className="bottom_list">
                                 <p className="l_name">{item.nickname}</p>
