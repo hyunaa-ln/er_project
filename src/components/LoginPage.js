@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useModal } from '../components/ModalContext'; // 모달 컨텍스트 가져오기
 import logo from '../assets/Logo.svg';
 
 function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { openModal } = useModal(); // 모달 함수 호출
 
     const handleUsernameChange = (e) => setUsername(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -33,11 +34,11 @@ function LoginPage() {
                 }
             } else {
                 console.error('Failed to fetch user info');
-                setError('사용자 정보를 가져오는 데 실패했습니다.');
+                openModal(<div><h2>오류 발생</h2><p>사용자 정보를 가져오는 데 실패했습니다.</p></div>); // 모달로 오류 표시
             }
         } catch (error) {
             console.error('Error fetching user info:', error);
-            setError('서버와 통신 중 오류가 발생했습니다.');
+            openModal(<div><h2>오류 발생</h2><p>서버와 통신 중 오류가 발생했습니다.</p></div>); // 모달로 오류 표시
         }
     };
 
@@ -55,8 +56,6 @@ function LoginPage() {
             if (response.ok) {
                 // JWT 토큰 수신
                 const authHeader = response.headers.get('Authorization');
-                console.log('Authorization Header:', authHeader);
-
                 const token = authHeader?.split(' ')[1]; // 'Bearer ' 접두사 제거
                 if (token) {
                     localStorage.setItem('token', token); // 토큰 저장
@@ -65,15 +64,16 @@ function LoginPage() {
                     // 로그인 성공 후 MBTI 확인 및 리다이렉트
                     await handleLoginSuccess();
                 } else {
-                    alert('토큰을 받아올 수 없습니다.');
+                    openModal(<div><h2>오류 발생</h2><p>토큰을 받아올 수 없습니다.</p></div>); // 모달로 오류 표시
                 }
             } else {
-                const errorMessage = await response.text();
-                alert(errorMessage || '로그인에 실패했습니다.');
+                const errorResponse = await response.json(); // JSON 형식으로 응답 받기
+                const errorMessage = errorResponse.errorMessage || '로그인에 실패했습니다.'; // 오류 메시지 추출
+                openModal(<div><h2>로그인 오류</h2><p>{errorMessage}</p></div>); // 모달로 오류 표시
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('서버와 통신 중 오류가 발생했습니다.');
+            openModal(<div><h2>오류 발생</h2><p>서버와 통신 중 오류가 발생했습니다.</p></div>); // 모달로 오류 표시
         }
     };
 
@@ -122,7 +122,6 @@ function LoginPage() {
                 <Link to="/id/findPwd" className="findpwd">
                     비밀번호 찾기
                 </Link>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
             </form>
         </div>
     );
