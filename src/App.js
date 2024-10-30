@@ -17,6 +17,8 @@ import MyPage from './components/MyPage';
 import NewPostPage from './components/NewPostPage';
 import NickNamePage from './components/NickNamePage';
 import PwdPage from './components/PwdPage';
+import ResetMbitPage from './components/ResetMbtiPage';
+import ResetPwdPage from './components/ResetPwdPage';
 import RootLayout from './components/RootLayout';
 import SetMbtiPage from './components/SetMbtiPage';
 import SetNewPwdPage from './components/SetNewPwdPage';
@@ -50,6 +52,8 @@ const App = () => {
                     <Route path="communityPost/:postId" element={<CommunityPostPage />} /> {/* 동적 라우트 설정 */}
                     <Route path="newPost" element={<NewPostPage />} />
                     <Route path="editPost/:postId" element={<EditPostPage />} /> {/* 동적 라우트 수정 */}
+                    <Route path="resetMbti" element={<ResetMbitPage />} />
+                    <Route path="resetPwd" element={<ResetPwdPage />} />
                 </Route>
 
                 {/* 404 Not Found 페이지 */}

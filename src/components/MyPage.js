@@ -72,10 +72,10 @@ function MyPage() {
                     <Link to="">내가 쓴 댓글</Link>
                 </li>
                 <li>
-                    <Link to="">나의 MBTI 수정</Link>
+                    <Link to="/resetMbti">나의 MBTI 수정</Link>
                 </li>
                 <li>
-                    <Link to="">비밀번호 수정</Link>
+                    <Link to="/resetPwd">비밀번호 수정</Link>
                 </li>
                 <li>
                     <button onClick={handleLogout}>로그아웃</button>
