@@ -711,6 +711,44 @@ h1 img {
   max-width: 70%;
   word-wrap: break-word;
 }
+.loading {
+  position: relative;
+  margin-left: 40px;
+  padding: 20px 25px;
+  border-radius: 25px;
+  background: #6938EF;
+}
+.loading div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.loading div span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  animation: loading .9s ease-in-out infinite alternate;
+}
+.loading div span:nth-child(2) {
+  animation-delay: .3s;
+}
+.loading div span:nth-child(3) {
+  animation-delay: .6s;
+}
+
+@keyframes loading {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
+
 
 .user {
   background-color: #eee;
@@ -882,4 +920,48 @@ h1 img {
 }
 .form-group input:focus, .form-group textarea:focus {
   outline: none;
+}
+
+
+/* alertModal */
+.alertModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 350px;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  padding: 30px 20px 20px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, .1);
+}
+.alertModal h2 {
+  font-size: 16px;
+}
+.alertModal p {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+.alertModal div div button {
+  width: 100%;
+  background: #6938EF;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 16px;
+  padding: 12px 0;
+  margin: 0 0 15px;
+}
+.modalClose {
+  font-size: 16px;
+  color: #6938EF;
+}
+
+.alertModal input {
+  width: 100%;
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 20px;
+  box-sizing: border-box;
 }
