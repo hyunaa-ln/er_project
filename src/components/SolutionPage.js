@@ -10,6 +10,9 @@ function SolutionPage() {
             ? JSON.parse(savedMessages)
             : [{ sender: 'bot', text: '안녕하세요! 알고 싶은 상대의 MBTI를 선택해주세요.' }];
     });
+    useEffect(() => {
+        window.scrollTo(0, document.body.scrollHeight); // 페이지 로드 시 최하단으로 이동
+      }, []);
 
     const [selectedMbti, setSelectedMbti] = useState('');
     const [loading, setLoading] = useState(false);

@@ -200,6 +200,7 @@ h1 img {
     font-size: 14px;
     line-height: 24px;
     box-shadow: 0 3px 20px #6938ef45;
+    margin-bottom: 102px;
 }
 
 /* login */
@@ -693,23 +694,26 @@ h1 img {
 
 /* solution */
 
-.solution {
-    padding-top: 26px;
-}
 .solution .backBtn {
     margin-top: 5px;
 }
 .solution .topWrap {
-    position: relative;
+    position: fixed;
+    top: 0;
+    z-index: 7;
+    width: 500px;
     display: flex;
     align-items: center;
+    padding: 26px 0 20px;
+    background: #fff;
+    border-bottom: 1px solid #eee;
 }
 .solution .topWrap h1 {
     margin: 0;
     position: absolute;
-    top: 0;
     left: 50%;
-    transform: translate(-50%, 0);
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .chat-container {
@@ -717,7 +721,7 @@ h1 img {
     flex-direction: column;
     align-items: flex-start;
     max-width: 400px;
-    margin: 30px auto 0;
+    margin: 90px auto 0;
     font-size: 14px;
 }
 
