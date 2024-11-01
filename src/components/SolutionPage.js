@@ -5,7 +5,6 @@ import thumb from '../assets/ai.svg';
 
 function SolutionPage() {
     const [messages, setMessages] = useState(() => {
-        // 페이지가 로드될 때 localStorage에서 상태 복원
         const savedMessages = localStorage.getItem('messages');
         return savedMessages
             ? JSON.parse(savedMessages)
@@ -32,9 +31,8 @@ function SolutionPage() {
         'ENFJ',
         'ENTJ',
     ]);
-    const [questionTypes, setQuestionTypes] = useState([]);
+    const [userQuestion, setUserQuestion] = useState('');
 
-    // 메시지 상태가 변경될 때마다 localStorage에 저장
     useEffect(() => {
         localStorage.setItem('messages', JSON.stringify(messages));
     }, [messages]);
@@ -46,30 +44,25 @@ function SolutionPage() {
         if (sender === 'user') {
             if (choices.includes(text)) {
                 setSelectedMbti(text);
-                setMessages((prev) => [
-                    ...prev,
-                    { sender: 'bot', text: '오늘 날씨에 기반하여 최고의 연애 솔루션을 드립니다!' },
-                ]);
-                setQuestionTypes(['이상형', '데이트 코스', '선호하는 연락방식', '좋아하는 플러팅', '싫어하는 행동']);
+                setMessages((prev) => [...prev, { sender: 'bot', text: '알고 싶은 내용을 자유롭게 입력해주세요!' }]);
             } else {
                 setLoading(true);
                 const botResponse = await askChatbot(selectedMbti, text);
 
                 setMessages((prev) => [...prev, { sender: 'bot', text: botResponse }]);
 
-                // 최신 솔루션을 localStorage에 저장
                 localStorage.setItem('latestSolution', botResponse);
 
-                // 질문 후 초기화하고 다시 MBTI 선택 메시지 추가
-                setMessages((prev) => [...prev, { sender: 'bot', text: '알고 싶은 상대의 MBTI를 선택해주세요.' }]);
+                setMessages((prev) => [...prev, { sender: 'bot', text: '다시 알고 싶은 상대의 MBTI를 선택해주세요.' }]);
 
-                setQuestionTypes([]);
                 setLoading(false);
+                setSelectedMbti('');
+                setUserQuestion('');
             }
         }
     };
 
-    const askChatbot = async (mbti, questionType) => {
+    const askChatbot = async (mbti, question) => {
         const token = localStorage.getItem('token');
         try {
             const response = await fetch('http://localhost:8080/chatbot/ask', {
@@ -78,7 +71,7 @@ function SolutionPage() {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({ mbti, questionType }),
+                body: JSON.stringify({ mbti, question }),
             });
 
             if (response.ok) {
@@ -90,6 +83,14 @@ function SolutionPage() {
         } catch (error) {
             console.error('Error:', error);
             return '서버와 통신 중 오류가 발생했습니다.';
+        }
+    };
+
+    const handleQuestionSubmit = () => {
+        if (userQuestion.trim() && selectedMbti) {
+            addMessage('user', userQuestion);
+        } else {
+            alert('먼저 MBTI를 선택하고 질문을 입력하세요.');
         }
     };
 
@@ -109,27 +110,44 @@ function SolutionPage() {
                         <span>{msg.text}</span>
                     </div>
                 ))}
-                {loading && <div className="loading">
-                    <img src={thumb} alt="Bot" className="bot-image" />
-                    <div>
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                {loading && (
+                    <div className="loading">
+                        <img src={thumb} alt="Bot" className="bot-image" />
+                        <div>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
                     </div>
-                    </div>}
+                )}
             </div>
 
             <div className="choices-container">
-                {(questionTypes.length === 0 ? choices : questionTypes).map((choice, index) => (
-                    <button
-                        key={index}
-                        className="choice-bubble"
-                        onClick={() => addMessage('user', choice)}
-                        disabled={loading}
-                    >
-                        {choice}
-                    </button>
-                ))}
+                {selectedMbti === '' ? (
+                    choices.map((choice, index) => (
+                        <button
+                            key={index}
+                            className="choice-bubble"
+                            onClick={() => addMessage('user', choice)}
+                            disabled={loading}
+                        >
+                            {choice}
+                        </button>
+                    ))
+                ) : (
+                    <div className="input-container">
+                        <input
+                            type="text"
+                            value={userQuestion}
+                            onChange={(e) => setUserQuestion(e.target.value)}
+                            placeholder="궁금한 내용을 입력하세요..."
+                            disabled={loading}
+                        />
+                        <button onClick={handleQuestionSubmit} disabled={loading}>
+                            질문하기
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );

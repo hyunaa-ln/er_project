@@ -19,6 +19,7 @@ function CommunityPostPage() {
     const [newComment, setNewComment] = useState('');
     const [isAuthor, setIsAuthor] = useState(false);
 
+    const adviceContent = post?.advice || '조언을 불러오지 못했습니다.';
     // 토큰에서 username 추출
     const getUsernameFromToken = () => {
         const token = localStorage.getItem('token');
@@ -186,6 +187,13 @@ function CommunityPostPage() {
                 </div>
                 <div className="mainTextWrap">
                     <p className="mainText">{post.postContent}</p>
+                    {adviceContent && (
+                        <div className="aiAdvice">
+                            <p>
+                                <strong>AI의 조언!</strong> {adviceContent}
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
 

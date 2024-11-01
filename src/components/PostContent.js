@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import thumb from '../assets/Vector.svg';
 import e_heart from '../assets/empty-heart.svg';
 import f_heart from '../assets/full-heart.svg';
@@ -7,6 +7,21 @@ function PostContent({ post, isAuthor, postId, navigate }) {
     const [isLiked, setIsLiked] = useState(post.isLiked || localStorage.getItem(`like-${postId}`) === 'true');
     const [likeCount, setLikeCount] = useState(post.likeCount);
     const [isProcessing, setIsProcessing] = useState(false);
+
+    useEffect(() => {
+        // Log the advice data to check its structure
+        console.log('Raw advice data:', post.advice);
+
+        // Try parsing the advice field safely
+        if (post.advice) {
+            try {
+                const parsedAdvice = JSON.parse(post.advice);
+                setAdviceContent(parsedAdvice.choices[0].message.content);
+            } catch (error) {
+                console.error('Error parsing advice:', error);
+            }
+        }
+    }, [post.advice]);
 
     const toggleLike = async () => {
         if (isProcessing) return;
@@ -78,6 +93,14 @@ function PostContent({ post, isAuthor, postId, navigate }) {
                     <img src={isLiked ? f_heart : e_heart} alt="heart" />
                     <span>{likeCount}</span>
                 </div>
+            </div>
+            <div className="mainTextWrap">
+                <p>{post.postContent}</p>
+                {adviceContent && (
+                    <div className="adviceBox">
+                        <strong>AI의 조언!</strong> <span>{adviceContent}</span>
+                    </div>
+                )}
             </div>
             <div className="mainTextWrap">
                 <p>{post.postContent}</p>
