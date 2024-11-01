@@ -15,6 +15,8 @@ import JoinCompletePage from './components/JoinCompletePage';
 import JoinPage from './components/JoinPage';
 import LoginPage from './components/LoginPage';
 import MyPage from './components/MyPage';
+import MyPosts from './components/MyPosts';
+import MyComments from './components/MyComments';
 import NewPostPage from './components/NewPostPage';
 import NickNamePage from './components/NickNamePage';
 import PwdPage from './components/PwdPage';
@@ -46,6 +48,8 @@ const App = () => {
                     </Route>
                     <Route path="joinComplete" element={<JoinCompletePage />} />
                     <Route path="myPage" element={<MyPage />} />
+                    <Route path="/my-posts" element={<MyPosts />} />
+                    <Route path="/my-comments" element={<MyComments />} />
                     <Route path="setMbti" element={<SetMbtiPage />} />
                     <Route path="getMbti" element={<GetMbtiPage />} />
                     <Route path="solution" element={<SolutionPage />} />
@@ -65,20 +69,20 @@ const App = () => {
     );
 
     return (
-      <ModalProvider>
-        <RouterProvider router={router} />
-        <AlertModalWrapper />
-      </ModalProvider>
+        <ModalProvider>
+            <RouterProvider router={router} />
+            <AlertModalWrapper />
+        </ModalProvider>
     );
 
     function AlertModalWrapper() {
-      const { isModalOpen, closeModal, modalContent } = useModal();
-    
-      return (
-        <AlertModal isOpen={isModalOpen} onClose={closeModal}>
-          {modalContent}
-        </AlertModal>
-      );
+        const { isModalOpen, closeModal, modalContent } = useModal();
+
+        return (
+            <AlertModal isOpen={isModalOpen} onClose={closeModal}>
+                {modalContent}
+            </AlertModal>
+        );
     }
 };
 
