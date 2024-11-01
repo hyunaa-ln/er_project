@@ -7,18 +7,18 @@ function PostContent({ post, isAuthor, postId, navigate }) {
     const [isLiked, setIsLiked] = useState(post.isLiked || localStorage.getItem(`like-${postId}`) === 'true');
     const [likeCount, setLikeCount] = useState(post.likeCount);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [adviceContent, setAdviceContent] = useState(''); // 상태 추가
 
     useEffect(() => {
-        // Log the advice data to check its structure
         console.log('Raw advice data:', post.advice);
 
-        // Try parsing the advice field safely
         if (post.advice) {
             try {
                 const parsedAdvice = JSON.parse(post.advice);
                 setAdviceContent(parsedAdvice.choices[0].message.content);
             } catch (error) {
                 console.error('Error parsing advice:', error);
+                setAdviceContent('조언을 불러오지 못했습니다.');
             }
         }
     }, [post.advice]);
@@ -42,8 +42,6 @@ function PostContent({ post, isAuthor, postId, navigate }) {
 
             if (!response.ok) throw new Error(`Error: ${response.status}`);
             const data = await response.json();
-
-            console.log(data);
 
             setIsLiked(!isLiked);
             setLikeCount(data.data.likeCount);
@@ -101,9 +99,6 @@ function PostContent({ post, isAuthor, postId, navigate }) {
                         <strong>AI의 조언!</strong> <span>{adviceContent}</span>
                     </div>
                 )}
-            </div>
-            <div className="mainTextWrap">
-                <p>{post.postContent}</p>
             </div>
         </div>
     );
