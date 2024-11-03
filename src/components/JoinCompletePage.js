@@ -13,7 +13,7 @@ function JoinCompletPage() {
         </h1>
       </Link>
       <p>가입이 완료되었습니다.</p>
-      <Link to='/' className='complete_btn'>메인으로</Link>
+      <Link to='/login' className='complete_btn'>로그인</Link>
     </div>
   )
 }

@@ -9,25 +9,17 @@ function CommunityPage() {
     const [posts, setPosts] = useState([]);
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searchResult, setSearchResult] = useState({ isActive: false, keyword: '' });
-    const [page, setPage] = useState(0); // 페이지 상태 추가
-    const [isFetching, setIsFetching] = useState(false); // 데이터 가져오기 상태
+    const [page, setPage] = useState(0);
+    const [isFetching, setIsFetching] = useState(false);
     const navigate = useNavigate();
 
     const handlePostClick = (postId) => {
         navigate(`/communityPost/${postId}`);
     };
 
-    useEffect(() => {
-        if (activeTab === 'tab1') {
-            fetchPosts(0, true); // 최신글일 때 무한 스크롤 초기화
-        } else if (activeTab === 'tab2') {
-            fetchPopularPosts(); // 인기글일 때 10개 게시글만 불러오기
-        }
-    }, [activeTab]);
-
     const fetchPosts = useCallback(
         async (page, isNewTab = false) => {
-            if (activeTab !== 'tab1') return; // 최신글 탭이 아닌 경우 중단
+            if (activeTab !== 'tab1') return;
             setIsFetching(true);
             try {
                 const response = await fetch(`http://localhost:8080/api/posts/latest?page=${page}`);
@@ -43,7 +35,7 @@ function CommunityPage() {
                 setIsFetching(false);
             }
         },
-        [activeTab]
+        [activeTab] // `activeTab`이 바뀔 때 함수가 재생성됩니다.
     );
 
     const fetchPopularPosts = useCallback(async () => {
@@ -61,6 +53,14 @@ function CommunityPage() {
             setIsFetching(false);
         }
     }, []);
+
+    useEffect(() => {
+        if (activeTab === 'tab1') {
+            fetchPosts(0, true);
+        } else if (activeTab === 'tab2') {
+            fetchPopularPosts();
+        }
+    }, [activeTab, fetchPosts, fetchPopularPosts]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -105,7 +105,7 @@ function CommunityPage() {
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
-        setPage(0); // 탭 변경 시 페이지 초기화
+        setPage(0);
     };
 
     const formatDate = (dateString) => {
@@ -167,7 +167,7 @@ function CommunityPage() {
                         >
                             {activeTab === 'tab2' && <span className="rank">{index + 1}</span>}
                             <div>
-                                <h3>{item.postTitle}</h3>
+                            <h3>{item.postTitle.length > 25 ? `${item.postTitle.substring(0, 25)}...` : item.postTitle}</h3>
                                 <span className="category">{item.mbti}</span>
                             </div>
                             <div className="bottom_list">

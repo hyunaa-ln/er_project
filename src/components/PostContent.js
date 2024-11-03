@@ -93,6 +93,7 @@ function PostContent({ post, isAuthor, postId, navigate }) {
                 <div className="profile">
                     <p>{post.nickname}</p>
                     <span className="badge">{post.myMbti}</span>
+                    <p className='p_date'>10:22 PM</p>
                 </div>
                 {isAuthor && (
                     <div className="p_btnWrap">
@@ -115,6 +116,7 @@ function PostContent({ post, isAuthor, postId, navigate }) {
                 </div>
             </div>
             <div className="mainTextWrap">
+                <h2 className="postTitle">{post.postTitle}</h2>
                 <p className="mainText">{post.postContent}</p>
                 {adviceContent && (
                     <div className="adviceBox">

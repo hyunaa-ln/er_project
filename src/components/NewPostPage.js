@@ -84,7 +84,7 @@ function NewPostPage() {
                             placeholder="타이틀"
                             onChange={(e) => setTitle(e.target.value)}
                             required
-                            maxLength={20}
+                            maxLength={50}
                         />
                     </div>
 
