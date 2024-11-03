@@ -10,8 +10,9 @@ const CommentForm = ({ newComment, onCommentChange, onCommentSubmit }) => {
         onChange={onCommentChange}
         placeholder="Comment..."
         className='commentInput'
+        required
       />
-      <button type="submit">
+      <button type="submit" disabled={!newComment.trim()}> {/* 입력값이 없으면 버튼 비활성화 */}
         <img src={commentBtn} alt='commentBtn' />
       </button>
     </form>
