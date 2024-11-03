@@ -8,7 +8,9 @@ function CommunityPage() {
     const [activeTab, setActiveTab] = useState('tab1');
     const [posts, setPosts] = useState([]);
     const [searchKeyword, setSearchKeyword] = useState('');
-    const [searchResult, setSearchResult] = useState({ isActive: false, keyword: '' }); // 검색 결과와 키워드 저장
+    const [searchResult, setSearchResult] = useState({ isActive: false, keyword: '' });
+    const [page, setPage] = useState(0); // 페이지 상태 추가
+    const [isFetching, setIsFetching] = useState(false); // 데이터 가져오기 상태
     const navigate = useNavigate();
 
     const handlePostClick = (postId) => {
@@ -16,11 +18,12 @@ function CommunityPage() {
     };
 
     useEffect(() => {
-        fetchPosts(0);
+        fetchPosts(0, true); // 초기화 시 새로운 탭에서 데이터를 로드하고 페이지를 초기화
     }, [activeTab]);
 
     const fetchPosts = useCallback(
-        async (page) => {
+        async (page, isNewTab = false) => {
+            setIsFetching(true);
             try {
                 const endpoint =
                     activeTab === 'tab1'
@@ -33,18 +36,37 @@ function CommunityPage() {
                 }
 
                 const data = await response.json();
-                setPosts(data.data);
-                setSearchResult({ isActive: false, keyword: '' }); // 탭 변경 시 검색 결과 리셋
+                setPosts((prevPosts) => (isNewTab ? data.data : [...prevPosts, ...data.data]));
+                setSearchResult({ isActive: false, keyword: '' });
             } catch (error) {
                 console.error('Error fetching posts:', error);
+            } finally {
+                setIsFetching(false);
             }
         },
         [activeTab]
     );
 
     useEffect(() => {
-        fetchPosts(0);
-    }, [fetchPosts]);
+        const handleScroll = () => {
+            if (
+                window.innerHeight + document.documentElement.scrollTop >=
+                    document.documentElement.offsetHeight - 100 &&
+                !isFetching
+            ) {
+                setPage((prevPage) => prevPage + 1);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [isFetching]);
+
+    useEffect(() => {
+        if (page > 0) {
+            fetchPosts(page);
+        }
+    }, [page, fetchPosts]);
 
     const handleSearch = async (e) => {
         e.preventDefault();
@@ -57,7 +79,7 @@ function CommunityPage() {
 
             const data = await response.json();
             setPosts(data.data);
-            setSearchResult({ isActive: true, keyword: searchKeyword }); // 검색 결과 상태와 키워드 설정
+            setSearchResult({ isActive: true, keyword: searchKeyword });
         } catch (error) {
             console.error('Error searching posts:', error);
         }
@@ -65,6 +87,19 @@ function CommunityPage() {
 
     const handleTabClick = (tab) => {
         setActiveTab(tab);
+        setPage(0); // 탭 변경 시 페이지 초기화
+    };
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('ko-KR', {
+            year: '2-digit',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+        });
     };
 
     return (
@@ -102,9 +137,7 @@ function CommunityPage() {
                 </button>
             </div>
 
-            {searchResult.isActive && (
-                <p className="search-result-text">"{searchResult.keyword}" 검색결과</p>
-            )} {/* 검색 결과와 키워드 표시 */}
+            {searchResult.isActive && <p className="search-result-text">"{searchResult.keyword}" 검색결과</p>}
 
             <div className="tab_content">
                 <ul className="tab_list">
@@ -121,11 +154,12 @@ function CommunityPage() {
                             </div>
                             <div className="bottom_list">
                                 <p className="l_name">{item.nickname}</p>
-                                <p className="l_time">{item.time}</p>
+                                <p className="l_time">{formatDate(item.time)}</p>
                             </div>
                         </li>
                     ))}
                 </ul>
+                {isFetching && <p>Loading more posts...</p>}
             </div>
 
             <div className="addPost">
