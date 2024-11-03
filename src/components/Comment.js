@@ -31,6 +31,21 @@ function Comment({ comment, postId, token, decoded, isProcessing, setIsProcessin
         fetchLikeStatus();
     }, [postId, comment.id, token]);
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const formattedDate = date.toLocaleDateString('ko-KR', {
+            year: '2-digit',
+            month: '2-digit',
+            day: '2-digit',
+        });
+        const formattedTime = date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+        });
+        return `${formattedDate}<br />${formattedTime}`;
+    };
+
     const handleToggleLike = async () => {
         if (isProcessing) return;
         setIsProcessing(true);
@@ -119,7 +134,7 @@ function Comment({ comment, postId, token, decoded, isProcessing, setIsProcessin
                 </div>
             </div>
             <div className="commentRight">
-                <p className="c_date">{new Date(comment.createdDate).toLocaleDateString()}</p>
+                <p className="c_date" dangerouslySetInnerHTML={{ __html: formatDate(comment.createdDate) }}></p>
                 <div
                     className={`c_heart ${isProcessing ? 'disabled' : ''}`}
                     onClick={handleToggleLike}

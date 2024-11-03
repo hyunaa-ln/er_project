@@ -110,14 +110,17 @@ function CommunityPage() {
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-        return date.toLocaleString('ko-KR', {
+        const formattedDate = date.toLocaleDateString('ko-KR', {
             year: '2-digit',
             month: '2-digit',
             day: '2-digit',
+        });
+        const formattedTime = date.toLocaleTimeString('en-US', {
             hour: '2-digit',
             minute: '2-digit',
-            hour12: false,
+            hour12: true,
         });
+        return `${formattedDate} ${formattedTime}`;
     };
 
     return (
@@ -167,7 +170,11 @@ function CommunityPage() {
                         >
                             {activeTab === 'tab2' && <span className="rank">{index + 1}</span>}
                             <div>
-                            <h3>{item.postTitle.length > 25 ? `${item.postTitle.substring(0, 25)}...` : item.postTitle}</h3>
+                                <h3>
+                                    {item.postTitle.length > 25
+                                        ? `${item.postTitle.substring(0, 25)}...`
+                                        : item.postTitle}
+                                </h3>
                                 <span className="category">{item.mbti}</span>
                             </div>
                             <div className="bottom_list">

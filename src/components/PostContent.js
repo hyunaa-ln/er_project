@@ -13,6 +13,7 @@ function PostContent({ post, isAuthor, postId, navigate }) {
         // 좋아요 상태 서버에서 불러오기
         const fetchLikeStatus = async () => {
             try {
+                console.log(post);
                 const response = await fetch(`http://localhost:8080/api/posts/${postId}/is-liked`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -39,6 +40,28 @@ function PostContent({ post, isAuthor, postId, navigate }) {
             }
         }
     }, [post.advice]);
+
+    // 1. ISO 형식으로 직접 수정 시도
+    const formatDate = (dateString) => {
+        if (!dateString) return 'Invalid date';
+
+        // ISO 형식으로 변환 시도
+        const date = new Date(dateString.includes('T') ? dateString : `${dateString}T00:00:00`);
+
+        if (isNaN(date.getTime())) return 'Invalid date';
+
+        const formattedDate = date.toLocaleDateString('ko-KR', {
+            year: '2-digit',
+            month: '2-digit',
+            day: '2-digit',
+        });
+        const formattedTime = date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+        });
+        return `${formattedDate} ${formattedTime}`;
+    };
 
     const toggleLike = async () => {
         if (isProcessing) return;
@@ -93,7 +116,7 @@ function PostContent({ post, isAuthor, postId, navigate }) {
                 <div className="profile">
                     <p>{post.nickname}</p>
                     <span className="badge">{post.myMbti}</span>
-                    <p className='p_date'>10:22 PM</p>
+                    <p className="p_date">{formatDate(post.time)}</p>
                 </div>
                 {isAuthor && (
                     <div className="p_btnWrap">
