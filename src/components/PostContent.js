@@ -81,8 +81,9 @@ function PostContent({ post, isAuthor, postId, navigate }) {
                 </div>
                 {isAuthor && (
                     <div className="p_btnWrap">
-                        <button onClick={handleEdit}>수정</button>
-                        <button onClick={handleDelete}>삭제</button>
+                        <button className="p_btn p_editBtn" onClick={handleEdit}>수정</button>
+                        <span></span>
+                        <button className="p_btn p_deleteBtn" onClick={handleDelete}>삭제</button>
                     </div>
                 )}
                 <div
@@ -90,15 +91,15 @@ function PostContent({ post, isAuthor, postId, navigate }) {
                     onClick={toggleLike}
                     style={{ cursor: isProcessing ? 'not-allowed' : 'pointer' }}
                 >
-                    <img src={isLiked ? f_heart : e_heart} alt="heart" />
+                    <img className='p_heart' src={isLiked ? f_heart : e_heart} alt="heart" />
                     <span>{likeCount}</span>
                 </div>
             </div>
             <div className="mainTextWrap">
-                <p>{post.postContent}</p>
+                <p className='mainText'>{post.postContent}</p>
                 {adviceContent && (
                     <div className="adviceBox">
-                        <strong>AI의 조언!</strong> <span>{adviceContent}</span>
+                        <strong>· </strong><span>{adviceContent}</span>
                     </div>
                 )}
             </div>

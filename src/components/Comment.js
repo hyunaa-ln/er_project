@@ -69,38 +69,43 @@ function Comment({ comment, postId, token, decoded, isProcessing, setIsProcessin
 
     return (
         <div className="comment">
-            <div className="profileBox">
-                <img src={thumb} alt="thumb" className="main_thumb" />
-                <div className="profile">
-                    <p>{comment.nickname}</p>
-                    <span className="badge">{comment.myMbti}</span>
+            <img src={thumb} alt="thumb" className="comment_thumb" />
+            <div className="commentBox">
+                <div className='commentWrapWrap'>
+                   <div className="commentWrap">
+                        <p>{comment.nickname}</p>
+                        <span className="badge">{comment.myMbti}</span>
+                        {decoded.username === comment.username && (
+                            <div className="commentActions c_btnWrap">
+                                {isEditing ? (
+                                    <button className='c_btn c_editBtn' onClick={handleSave}>저장</button>
+                                ) : (
+                                    <button className='c_btn c_editBtn' onClick={handleEdit}>수정</button>
+                                )}
+                                <span></span>
+                                <button className='c_btn c_deleteBtn' onClick={() => handleDelete(comment.id)}>삭제</button>
+                            </div>
+                        )}
+                    </div>
                     {isEditing ? (
-                        <input type="text" value={editedContent} onChange={(e) => setEditedContent(e.target.value)} />
-                    ) : (
-                        <p className="commentContent">{editedContent}</p>
-                    )}
+                            <input type="text" value={editedContent} onChange={(e) => setEditedContent(e.target.value)} />
+                        ) : (
+                            <p className="commentContent">{editedContent}</p>
+                        )} 
                 </div>
+                
             </div>
             <div className="commentRight">
-                <p>{new Date(comment.createdDate).toLocaleDateString()}</p>
+                <p className='c_date'>{new Date(comment.createdDate).toLocaleDateString()}</p>
                 <div
-                    className={`p_heart ${isProcessing ? 'disabled' : ''}`}
+                    className={`c_heart ${isProcessing ? 'disabled' : ''}`}
                     onClick={handleToggleLike}
                     style={{ cursor: isProcessing ? 'not-allowed' : 'pointer' }}
                 >
                     <img src={isLiked ? f_heart : e_heart} alt="heart" />
                     <span>{likeCount}</span>
                 </div>
-                {decoded.username === comment.username && (
-                    <div className="commentActions">
-                        {isEditing ? (
-                            <button onClick={handleSave}>Save</button>
-                        ) : (
-                            <button onClick={handleEdit}>Edit</button>
-                        )}
-                        <button onClick={() => handleDelete(comment.id)}>Delete</button>
-                    </div>
-                )}
+                
             </div>
         </div>
     );
