@@ -28,6 +28,7 @@ import SetNewPwdPage from './components/SetNewPwdPage';
 import SolutionPage from './components/SolutionPage';
 import AlertModal from './components/AlertModal';
 import NotFoundPage from './components/NotFoundPage';
+import ProtectedRoute from './components/ProtectedRoute'; // ProtectedRoute 임포트
 
 const App = () => {
     const router = createBrowserRouter(
@@ -52,12 +53,14 @@ const App = () => {
                     <Route path="/my-comments" element={<MyComments />} />
                     <Route path="setMbti" element={<SetMbtiPage />} />
                     <Route path="getMbti" element={<GetMbtiPage />} />
-                    <Route path="solution" element={<SolutionPage />} />
-                    {/* Community 관련 페이지 */}
+                    {/* 보호된 라우트 */}
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="solution" element={<SolutionPage />} />
+                        <Route path="communityPost/:postId" element={<CommunityPostPage />} />
+                    </Route>
                     <Route path="community" element={<CommunityPage />} />
-                    <Route path="communityPost/:postId" element={<CommunityPostPage />} /> {/* 동적 라우트 설정 */}
                     <Route path="newPost" element={<NewPostPage />} />
-                    <Route path="editPost/:postId" element={<EditPostPage />} /> {/* 동적 라우트 수정 */}
+                    <Route path="editPost/:postId" element={<EditPostPage />} />
                     <Route path="resetMbti" element={<ResetMbitPage />} />
                     <Route path="resetPwd" element={<ResetPwdPage />} />
                 </Route>

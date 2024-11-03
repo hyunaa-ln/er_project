@@ -39,7 +39,7 @@ function JoinPage() {
                 );
 
                 if (sendCodeResponse.ok) {
-                    alert('인증번호가 발송되었습니다.');
+                    handleOpenErrorModal('인증번호가 발송되었습니다.');
                     navigate('/id/code', { state: { email } });
                 } else {
                     handleOpenErrorModal('인증번호 발송에 실패했습니다.'); // 인증번호 발송 실패 시 모달 띄우기
