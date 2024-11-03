@@ -127,7 +127,7 @@ function Comment({ comment, postId, token, decoded, isProcessing, setIsProcessin
                         )}
                     </div>
                     {isEditing ? (
-                        <input type="text" value={editedContent} onChange={(e) => setEditedContent(e.target.value)} />
+                        <textarea className='edit_comment' type="text" required value={editedContent} onChange={(e) => setEditedContent(e.target.value)} />
                     ) : (
                         <p className="commentContent">{editedContent}</p>
                     )}

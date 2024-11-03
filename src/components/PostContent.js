@@ -27,7 +27,7 @@ function PostContent({ post, isAuthor, postId, navigate }) {
             }
         };
         fetchLikeStatus();
-    }, [postId]);
+    }, [postId, post]);
 
     useEffect(() => {
         if (post.advice) {

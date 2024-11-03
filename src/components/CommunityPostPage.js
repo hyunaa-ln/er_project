@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import BackButton from './BackButton';
+import GoCommunityBtn from './GoCommunityBtn';
 import PostContent from './PostContent';
 import CommentsSection from './CommentsSection';
 import CommentForm from './CommentForm';
@@ -88,7 +88,7 @@ function CommunityPostPage() {
 
     return (
         <div className="communityPost">
-            <BackButton />
+            <GoCommunityBtn />
             {post && (
                 <PostContent
                     post={post}
