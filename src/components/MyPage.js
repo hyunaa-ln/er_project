@@ -96,7 +96,8 @@ function MyPage() {
     }, [navigate]);
 
     const handleLogout = () => {
-        localStorage.removeItem('token'); // 토큰 삭제
+        localStorage.clear();
+        // localStorage.removeItem('token'); // 토큰 삭제
         closeModal(); // 모달 닫기
         navigate('/login'); // 로그인 페이지로 이동
     };
