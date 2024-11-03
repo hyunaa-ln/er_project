@@ -83,7 +83,7 @@ function HomePage() {
                             ) => (
                                 <li key={post.id}>
                                     <Link to={`/communityPost/${post.id}`}>
-                                        <span>{index + 1}</span> {post.postTitle}
+                                        <span>{index + 1}</span> {post.postTitle.length > 24 ? `${post.postTitle.substring(0, 24)}...` : post.postTitle}
                                     </Link>
                                 </li>
                             )
