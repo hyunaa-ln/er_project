@@ -82,7 +82,7 @@ function HomePage() {
                                 index // 처음 5개만 표시
                             ) => (
                                 <li key={post.id}>
-                                    <Link to={`/posts/${post.id}`}>
+                                    <Link to={`/communityPost/${post.id}`}>
                                         <span>{index + 1}</span> {post.postTitle}
                                     </Link>
                                 </li>
