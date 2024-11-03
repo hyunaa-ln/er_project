@@ -27,7 +27,6 @@ function CommentsSection({ comments, postId, setComments }) {
 
     return (
         <div className="commentsSection">
-            <h3>Comments</h3>
             {comments.map((comment) => (
                 <Comment
                     key={comment.id}
