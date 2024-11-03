@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import BackButton from './BackButton';
 import { Link } from 'react-router-dom';
 import thumb from '../assets/ai.svg';
+import commentBtn from '../assets/commentBtn.svg';
 
 function SolutionPage() {
     const [messages, setMessages] = useState(() => {
@@ -10,31 +11,27 @@ function SolutionPage() {
             ? JSON.parse(savedMessages)
             : [{ sender: 'bot', text: '안녕하세요! 알고 싶은 상대의 MBTI를 선택해주세요.' }];
     });
-    useEffect(() => {
-        window.scrollTo(0, document.body.scrollHeight); // 페이지 로드 시 최하단으로 이동
-      }, []);
-
     const [selectedMbti, setSelectedMbti] = useState('');
     const [loading, setLoading] = useState(false);
-    const [choices] = useState([
-        'ISTJ',
-        'ISFJ',
-        'INFJ',
-        'INTJ',
-        'ISTP',
-        'ISFP',
-        'INFP',
-        'INTP',
-        'ESTP',
-        'ESFP',
-        'ENFP',
-        'ENTP',
-        'ESTJ',
-        'ESFJ',
-        'ENFJ',
-        'ENTJ',
-    ]);
     const [userQuestion, setUserQuestion] = useState('');
+
+    const [choices] = useState([
+        'ISTJ', 'ISFJ', 'INFJ', 'INTJ', 'ISTP', 'ISFP', 'INFP', 'INTP',
+        'ESTP', 'ESFP', 'ENFP', 'ENTP', 'ESTJ', 'ESFJ', 'ENFJ', 'ENTJ'
+    ]);
+
+    const chatContainerRef = useRef(null);
+    const isFirstLoad = useRef(true); // 첫 로드 상태 추적
+
+    // 메시지가 업데이트될 때마다 최하단으로 스크롤
+    useEffect(() => {
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollIntoView({
+                behavior: isFirstLoad.current ? 'auto' : 'smooth', // 첫 로드 시 'auto' 사용
+            });
+            isFirstLoad.current = false; // 이후에는 smooth로 설정
+        }
+    }, [messages]);
 
     useEffect(() => {
         localStorage.setItem('messages', JSON.stringify(messages));
@@ -52,11 +49,13 @@ function SolutionPage() {
                 setLoading(true);
                 const botResponse = await askChatbot(selectedMbti, text);
 
-                setMessages((prev) => [...prev, { sender: 'bot', text: botResponse }]);
+                setMessages((prev) => [
+                    ...prev,
+                    { sender: 'bot', text: botResponse },
+                    { sender: 'bot', text: '다시 알고 싶은 상대의 MBTI를 선택해주세요.' }
+                ]);
 
                 localStorage.setItem('latestSolution', botResponse);
-
-                setMessages((prev) => [...prev, { sender: 'bot', text: '다시 알고 싶은 상대의 MBTI를 선택해주세요.' }]);
 
                 setLoading(false);
                 setSelectedMbti('');
@@ -123,20 +122,24 @@ function SolutionPage() {
                         </div>
                     </div>
                 )}
+                {/* 스크롤 이동을 위한 참조 */}
+                <div ref={chatContainerRef} />
             </div>
 
             <div className="choices-container">
                 {selectedMbti === '' ? (
-                    choices.map((choice, index) => (
-                        <button
-                            key={index}
-                            className="choice-bubble"
-                            onClick={() => addMessage('user', choice)}
-                            disabled={loading}
-                        >
-                            {choice}
-                        </button>
-                    ))
+                    <div className='choicesWrap'>
+                        {choices.map((choice, index) => (
+                            <button
+                                key={index}
+                                className="choice-bubble"
+                                onClick={() => addMessage('user', choice)}
+                                disabled={loading}
+                            >
+                                {choice}
+                            </button>
+                        ))}
+                    </div>
                 ) : (
                     <div className="input-container">
                         <input
@@ -147,7 +150,7 @@ function SolutionPage() {
                             disabled={loading}
                         />
                         <button onClick={handleQuestionSubmit} disabled={loading}>
-                            질문하기
+                            <img src={commentBtn} alt='commentBtn' />
                         </button>
                     </div>
                 )}
