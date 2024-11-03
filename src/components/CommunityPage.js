@@ -18,23 +18,22 @@ function CommunityPage() {
     };
 
     useEffect(() => {
-        fetchPosts(0, true); // 초기화 시 새로운 탭에서 데이터를 로드하고 페이지를 초기화
+        if (activeTab === 'tab1') {
+            fetchPosts(0, true); // 최신글일 때 무한 스크롤 초기화
+        } else if (activeTab === 'tab2') {
+            fetchPopularPosts(); // 인기글일 때 10개 게시글만 불러오기
+        }
     }, [activeTab]);
 
     const fetchPosts = useCallback(
         async (page, isNewTab = false) => {
+            if (activeTab !== 'tab1') return; // 최신글 탭이 아닌 경우 중단
             setIsFetching(true);
             try {
-                const endpoint =
-                    activeTab === 'tab1'
-                        ? 'http://localhost:8080/api/posts/latest'
-                        : 'http://localhost:8080/api/posts/popular';
-                const response = await fetch(`${endpoint}?page=${page}`);
-
+                const response = await fetch(`http://localhost:8080/api/posts/latest?page=${page}`);
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status}`);
                 }
-
                 const data = await response.json();
                 setPosts((prevPosts) => (isNewTab ? data.data : [...prevPosts, ...data.data]));
                 setSearchResult({ isActive: false, keyword: '' });
@@ -47,6 +46,22 @@ function CommunityPage() {
         [activeTab]
     );
 
+    const fetchPopularPosts = useCallback(async () => {
+        setIsFetching(true);
+        try {
+            const response = await fetch(`http://localhost:8080/api/posts/popular`);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.status}`);
+            }
+            const data = await response.json();
+            setPosts(data.data); // 인기글은 처음에 불러온 10개만 설정
+        } catch (error) {
+            console.error('Error fetching popular posts:', error);
+        } finally {
+            setIsFetching(false);
+        }
+    }, []);
+
     useEffect(() => {
         const handleScroll = () => {
             if (
@@ -58,25 +73,28 @@ function CommunityPage() {
             }
         };
 
-        window.addEventListener('scroll', handleScroll);
+        if (activeTab === 'tab1') {
+            window.addEventListener('scroll', handleScroll);
+        } else {
+            window.removeEventListener('scroll', handleScroll);
+        }
+
         return () => window.removeEventListener('scroll', handleScroll);
-    }, [isFetching]);
+    }, [isFetching, activeTab]);
 
     useEffect(() => {
-        if (page > 0) {
+        if (page > 0 && activeTab === 'tab1') {
             fetchPosts(page);
         }
-    }, [page, fetchPosts]);
+    }, [page, fetchPosts, activeTab]);
 
     const handleSearch = async (e) => {
         e.preventDefault();
         try {
             const response = await fetch(`http://localhost:8080/api/posts/search?keyword=${searchKeyword}&page=0`);
-
             if (!response.ok) {
                 throw new Error(`Error: ${response.status}`);
             }
-
             const data = await response.json();
             setPosts(data.data);
             setSearchResult({ isActive: true, keyword: searchKeyword });
@@ -159,7 +177,7 @@ function CommunityPage() {
                         </li>
                     ))}
                 </ul>
-                {isFetching && <p>Loading more posts...</p>}
+                {isFetching && activeTab === 'tab1' && <p>Loading more posts...</p>}
             </div>
 
             <div className="addPost">
