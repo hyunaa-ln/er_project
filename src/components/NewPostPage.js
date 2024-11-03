@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // useNavigate 추가
 import BackButton from './BackButton';
 
 function NewPostPage() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [mbti, setMbti] = useState('ISTJ'); // 기본값 설정
+    const navigate = useNavigate(); // navigate 함수 생성
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -32,7 +34,9 @@ function NewPostPage() {
             const data = await response.json();
             console.log('게시글 등록 성공:', data);
             alert('게시글이 등록되었습니다!');
-            // 성공 시 다른 페이지로 이동하거나 초기화
+
+            // 게시글 등록 성공 시 커뮤니티 페이지로 이동
+            navigate('/community'); // community 페이지로 이동
         } catch (error) {
             console.error('게시글 등록 실패:', error);
             alert('게시글 등록에 실패했습니다.');
@@ -93,8 +97,6 @@ function NewPostPage() {
                             required
                         ></textarea>
                     </div>
-
-                    
 
                     <button type="submit" className="addBtn">
                         등록

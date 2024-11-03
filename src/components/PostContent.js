@@ -13,12 +13,13 @@ function PostContent({ post, isAuthor, postId, navigate }) {
         console.log('Raw advice data:', post.advice);
 
         if (post.advice) {
+            // JSON 형식 확인: JSON 형식이면 파싱하고, 아니면 그대로 설정
             try {
                 const parsedAdvice = JSON.parse(post.advice);
                 setAdviceContent(parsedAdvice.choices[0].message.content);
             } catch (error) {
-                console.error('Error parsing advice:', error);
-                setAdviceContent('조언을 불러오지 못했습니다.');
+                console.warn('Advice is not in JSON format, using it as plain text');
+                setAdviceContent(post.advice); // 단순 텍스트일 경우 그대로 사용
             }
         }
     }, [post.advice]);
@@ -54,6 +55,7 @@ function PostContent({ post, isAuthor, postId, navigate }) {
     };
 
     const handleEdit = () => navigate(`/editPost/${postId}`);
+
     const handleDelete = async () => {
         if (window.confirm('정말 이 게시물을 삭제하시겠습니까?')) {
             try {
@@ -62,7 +64,7 @@ function PostContent({ post, isAuthor, postId, navigate }) {
                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
                 });
                 alert('게시물이 삭제되었습니다.');
-                navigate('/');
+                navigate('/community'); // 커뮤니티 페이지로 이동
             } catch (err) {
                 console.error('Error deleting post:', err);
             }

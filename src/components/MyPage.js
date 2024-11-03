@@ -10,7 +10,7 @@ function MyPage() {
     const [error, setError] = useState('');
     const [inputPassword, setInputPassword] = useState('');
     const [isModalOpen, setModalOpen] = useState(false); // 모달 상태 추가
-    const { openModal , closeModal } = useModal();
+    const { openModal, closeModal } = useModal();
 
     const handleOpenLogoutModal = () => {
         openModal(
@@ -121,12 +121,12 @@ function MyPage() {
             </div>
 
             <ul className="mypage_list">
-                <li>
+                {/* <li>
                     <Link to="/my-posts">내가 쓴 글</Link>
                 </li>
                 <li>
                     <Link to="/my-comments">내가 쓴 댓글</Link>
-                </li>
+                </li> */}
                 <li>
                     <Link to="/resetMbti">나의 MBTI 수정</Link>
                 </li>
@@ -145,12 +145,12 @@ function MyPage() {
             {error && <p style={{ color: 'red' }}>{error}</p>}
 
             {/* AlertModal 컴포넌트 추가 */}
-            <Unregister 
-                isOpen={isModalOpen} 
-                onClose={() => setModalOpen(false)} 
-                inputPassword={inputPassword} 
-                setInputPassword={setInputPassword} 
-                onSubmit={handleUnregister} 
+            <Unregister
+                isOpen={isModalOpen}
+                onClose={() => setModalOpen(false)}
+                inputPassword={inputPassword}
+                setInputPassword={setInputPassword}
+                onSubmit={handleUnregister}
             />
         </div>
     );
